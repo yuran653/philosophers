@@ -1,0 +1,9 @@
+# Compiled Object files
+*.o
+
+# Compiled Dependency files
+*.d
+
+
+# Compiled Static libraries
+*.a
