@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 01:57:21 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/05/01 05:25:53 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/05/03 01:34:18 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,12 @@ typedef struct s_philo
 {
 	pthread_t		thread;
 	int				id;
-	int				left_fork;
-	int				right_fork;
+	// int				left_fork;
+	// int				right_fork;
+	pthread_mutex_t	fork;
+	pthread_mutex_t	*fork_next;
 	struct s_params	*params;
-	}	t_philo;
+}	t_philo;
 
 typedef struct s_params
 {
@@ -36,14 +38,14 @@ typedef struct s_params
 	int				time_to_sleep;
 	int				times_must_eat;
 	t_philo			*philo;
-	pthread_mutex_t	*forks;
+	// pthread_mutex_t	*forks;
 }	t_params;
 
 t_params	*validation(t_params *params, char **argv);
-void		philos_init(t_params *params);
-int			mutex_init(t_params *params);
+int			philos_init(t_params *params);
+// int			mutex_init(t_params *params);
 int			mutex_destroy(t_params *params);
-long int	get_timestamp(void);
+long long	get_timestamp(void);
 int			launch(t_params *params);
 
 #endif

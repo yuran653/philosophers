@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/29 01:53:06 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/05/01 05:23:31 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/05/03 01:41:10 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,12 @@ void	*test(void *ptr)
 	t_philo	*philo;
 
 	philo = (t_philo *)ptr;
-	pthread_mutex_lock(&philo->params->forks[philo->id]);
+	pthread_mutex_lock(&philo->fork);
+	pthread_mutex_lock(philo->fork_next);
 	printf("MUTEX_LOCK_UNLOCK ID[%d]\n", philo->id);
-	pthread_mutex_unlock(&philo->params->forks[philo->id]);
-	return((void *)philo);
+	pthread_mutex_unlock(&philo->fork);
+	pthread_mutex_unlock(philo->fork_next);
+	return ((void *)philo);
 }
 
 int	launch(t_params *params)
@@ -32,7 +34,7 @@ int	launch(t_params *params)
 	{
 		if (pthread_create(&params->philo[id].thread, NULL, &test, &params->philo[id]))
 			return (7);
-		printf("THREAD [%d] IS CREATED\n", id);
+		// printf("THREAD [%d] IS CREATED\n", id);
 		id++;
 	}
 	id = 0;
@@ -40,7 +42,7 @@ int	launch(t_params *params)
 	{
 		if (pthread_join(params->philo[id].thread, NULL))
 			return (8);
-		printf("THREAD [%d] IS FINISHED\n", id);
+		// printf("THREAD [%d] IS FINISHED\n", id);
 		id++;
 	}
 	return (0);

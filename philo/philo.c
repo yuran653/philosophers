@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 01:56:57 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/05/01 05:23:02 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/05/03 01:49:15 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	free_null(void *ptr)
 	ptr = NULL;
 }
 
-long int	get_timestamp(void)
+long long	get_timestamp(void)
 {
 	struct timeval	t;
 
@@ -31,8 +31,6 @@ int	error_code_free_exit(int code, t_params *params)
 	
 	if (params->philo)
 		free_null(params->philo);
-	if (params->forks)
-		free_null(params->forks);
 	if (params)
 		free_null(params);
 	if (code == 0)
@@ -77,18 +75,11 @@ int	main(int argc, char **argv)
 	params->philo = (t_philo *)malloc(sizeof(t_philo) * params->num_of_philo);
 	if (!params->philo)
 		return (error_code_free_exit(4, params));
-	philos_init(params);
-	params->forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * params->num_of_philo);
-	if (!params->forks)
-		return (error_code_free_exit(4, params));
-	if (mutex_init(params))
+	if (philos_init(params))
 		return (error_code_free_exit(5, params));
 	err = launch(params);
 	if (mutex_destroy(params))
 		return (error_code_free_exit(6, params));
-	for (int i = 0; i < params->num_of_philo; i++)
-		printf("LEFT FORK [%d]->[%d]<-[%d] RIGHT_FORK\n",
-			params->philo[i].left_fork, params->philo[i].id, params->philo[i].right_fork);
 	return (error_code_free_exit(err, params));
 }
 
@@ -98,3 +89,13 @@ int	main(int argc, char **argv)
 // for (int i = 0; i < params->num_of_philo; i++)
 // 		printf("LEFT FORK [%d]->[%d]<-[%d] RIGHT_FORK\n",
 // 			params->philo[i].left_fork, params->philo[i].id, params->philo[i].right_fork);
+
+	// if (params->forks)
+	// 	free_null(params->forks);
+
+	// params->forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * params->num_of_philo);
+	// if (!params->forks)
+	// 	return (error_code_free_exit(4, params));
+	// if (mutex_init(params))
+	// 	return (error_code_free_exit(5, params));
+
