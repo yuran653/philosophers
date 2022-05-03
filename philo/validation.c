@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 02:08:26 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/05/03 01:49:33 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/05/03 05:26:23 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static int	ft_atoi_ph(char *str, int *num)
 static int	init_params(t_params *params, char *argv, int i)
 {
 	if (i == 1)
-		if (ft_atoi_ph(argv, &params->num_of_philo) > 0)
+		if (ft_atoi_ph(argv, &params->num_of_philos) > 0)
 			return (0);
 	if (i == 2)
 		if (ft_atoi_ph(argv, &params->time_to_die) > 0)
@@ -74,6 +74,13 @@ t_params	*validation(t_params *params, char **argv)
 	}
 	if (i == 5)
 		params->times_must_eat = 0;
+	params->philos_have_eaten = 0;
+	params->turn = 1;
+	params->even_half = params->num_of_philos / 2;
+	params->odd_half = params->num_of_philos / 2 + params->num_of_philos % 2;
+	params->even_odd = EVEN;
+	if (params->num_of_philos % 2)
+		params->even_odd = ODD;
 	params->philo = NULL;
 	return (params);
 }

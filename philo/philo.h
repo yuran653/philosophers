@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 01:57:21 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/05/03 01:34:18 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/05/03 05:26:23 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,17 @@
 # include <sys/time.h>
 # include <unistd.h>
 
+typedef enum s_even_odd
+{
+	EVEN = 2,
+	ODD = 1
+}	t_even_odd;
+
 typedef struct s_philo
 {
 	pthread_t		thread;
 	int				id;
+	int				meals;
 	// int				left_fork;
 	// int				right_fork;
 	pthread_mutex_t	fork;
@@ -32,11 +39,16 @@ typedef struct s_philo
 
 typedef struct s_params
 {
-	int				num_of_philo;
+	int				num_of_philos;
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				times_must_eat;
+	int				philos_have_eaten;
+	int				turn;
+	int				even_half;
+	int				odd_half;
+	t_even_odd		even_odd;
 	t_philo			*philo;
 	// pthread_mutex_t	*forks;
 }	t_params;
