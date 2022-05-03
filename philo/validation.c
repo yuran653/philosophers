@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 02:08:26 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/05/03 05:26:23 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/05/03 06:37:07 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,9 +78,9 @@ t_params	*validation(t_params *params, char **argv)
 	params->turn = 1;
 	params->even_half = params->num_of_philos / 2;
 	params->odd_half = params->num_of_philos / 2 + params->num_of_philos % 2;
-	params->even_odd = EVEN;
-	if (params->num_of_philos % 2)
-		params->even_odd = ODD;
+	// params->even_odd = EVEN;
+	// if (params->num_of_philos % 2)
+	// 	params->even_odd = ODD;
 	params->philo = NULL;
 	return (params);
 }

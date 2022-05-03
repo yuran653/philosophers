@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/01 04:48:21 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/05/03 04:41:04 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/05/03 06:05:40 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ int	mutex_destroy(t_params *params)
 	while (++id <= params->num_of_philos)
 		if (pthread_mutex_destroy(&params->philo[id].fork))
 			return (6);
+	if (pthread_mutex_destroy(&params->print))
+		return (6);
 	return (0);
 }
 

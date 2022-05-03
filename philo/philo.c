@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 01:56:57 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/05/03 05:26:23 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/05/03 06:05:05 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,8 @@ int	main(int argc, char **argv)
 	if (!params->philo)
 		return (error_code_free_exit(4, params));
 	if (philos_init(params))
+		return (error_code_free_exit(5, params));
+	if (pthread_mutex_init(&params->print, NULL))
 		return (error_code_free_exit(5, params));
 	err = launch(params);
 	printf("PHILOS HAVE EATEN -%d- TIMES\n", params->philos_have_eaten);
