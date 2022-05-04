@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 01:56:57 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/05/03 06:05:05 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/05/04 05:47:42 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,35 @@ long long	get_timestamp(void)
 	return ((t.tv_sec * 1000) + (t.tv_usec / 1000));
 }
 
+int	ft_sleep(long long m_secs, t_params *params)
+{
+	long long	start;
+
+	start = get_timestamp();
+	while(!params->philo_is_dead)
+	{
+		if (get_timestamp() - start >= m_secs)
+			return (0);
+	}
+	return(0);
+}
+
+void	print_status(t_philo *philo, char *status)
+{
+	pthread_mutex_lock(&philo->params->print);
+	printf("[%7lldms] philosopher[%03d] %s\n",
+		get_timestamp() - philo->start, philo->id, status);
+		// get_timestamp() - philo->params->start, philo->id, status);
+	pthread_mutex_unlock(&philo->params->print);
+}
+
 int	error_code_free_exit(int code, t_params *params)
 {
 	
 	if (params->philo)
 		free_null(params->philo);
+	if (params->forks)
+		free_null(params->forks);
 	if (params)
 		free_null(params);
 	if (code == 0)
@@ -75,30 +99,15 @@ int	main(int argc, char **argv)
 	params->philo = (t_philo *)malloc(sizeof(t_philo) * params->num_of_philos);
 	if (!params->philo)
 		return (error_code_free_exit(4, params));
-	if (philos_init(params))
-		return (error_code_free_exit(5, params));
-	if (pthread_mutex_init(&params->print, NULL))
+	params->forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * params->num_of_philos);
+	if (!params->forks)
+		return (error_code_free_exit(4, params));
+	philos_init(params);
+	if (mutex_init(params))
 		return (error_code_free_exit(5, params));
 	err = launch(params);
-	printf("PHILOS HAVE EATEN -%d- TIMES\n", params->philos_have_eaten);
+	// printf("PHILOS HAVE EATEN -%d- TIMES\n", params->philos_have_eaten);
 	if (mutex_destroy(params))
 		return (error_code_free_exit(6, params));
 	return (error_code_free_exit(err, params));
 }
-
-// printf("num_of_philos = %d\ntime_to_die = %d\ntime_to_eat = %d\ntime_to_sleep = %d\ntimes_must_eat = %d\n",
-	// 	params->num_of_philos, params->time_to_die, params->time_to_eat, params->time_to_sleep, params->times_must_eat);
-	
-// for (int i = 0; i < params->num_of_philos; i++)
-// 		printf("LEFT FORK [%d]->[%d]<-[%d] RIGHT_FORK\n",
-// 			params->philo[i].left_fork, params->philo[i].id, params->philo[i].right_fork);
-
-	// if (params->forks)
-	// 	free_null(params->forks);
-
-	// params->forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * params->num_of_philos);
-	// if (!params->forks)
-	// 	return (error_code_free_exit(4, params));
-	// if (mutex_init(params))
-	// 	return (error_code_free_exit(5, params));
-

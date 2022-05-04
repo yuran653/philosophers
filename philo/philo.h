@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 01:57:21 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/05/03 06:36:53 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/05/04 05:45:37 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,21 +19,14 @@
 # include <sys/time.h>
 # include <unistd.h>
 
-// typedef enum s_even_odd
-// {
-// 	EVEN = 2,
-// 	ODD = 1
-// }	t_even_odd;
-
 typedef struct s_philo
 {
 	pthread_t		thread;
 	int				id;
 	int				meals;
-	// int				left_fork;
-	// int				right_fork;
-	pthread_mutex_t	fork;
-	pthread_mutex_t	*fork_next;
+	int				right_fork;
+	int				left_fork;
+	long long		start;
 	struct s_params	*params;
 }	t_philo;
 
@@ -44,20 +37,20 @@ typedef struct s_params
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				times_must_eat;
-	int				philos_have_eaten;
-	int				turn;
-	int				even_half;
-	int				odd_half;
-	// t_even_odd		even_odd;
+	int				philo_is_dead;
+	// long long		start;
 	t_philo			*philo;
+	pthread_mutex_t	*forks;
 	pthread_mutex_t	print;
 }	t_params;
 
 t_params	*validation(t_params *params, char **argv);
-int			philos_init(t_params *params);
-// int			mutex_init(t_params *params);
+void		philos_init(t_params *params);
+int			mutex_init(t_params *params);
 int			mutex_destroy(t_params *params);
+void		print_status(t_philo *philo, char *status);
 long long	get_timestamp(void);
+int			ft_sleep(long long m_secs, t_params *params);
 int			launch(t_params *params);
 
 #endif
