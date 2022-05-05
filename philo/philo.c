@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 01:56:57 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/05/04 05:47:42 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/05/05 03:19:17 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	free_null(void *ptr)
 	ptr = NULL;
 }
 
-long long	get_timestamp(void)
+size_t	get_timestamp(void)
 {
 	struct timeval	t;
 
@@ -26,9 +26,9 @@ long long	get_timestamp(void)
 	return ((t.tv_sec * 1000) + (t.tv_usec / 1000));
 }
 
-int	ft_sleep(long long m_secs, t_params *params)
+int	ft_sleep(size_t m_secs, t_params *params)
 {
-	long long	start;
+	size_t	start;
 
 	start = get_timestamp();
 	while(!params->philo_is_dead)
@@ -37,15 +37,6 @@ int	ft_sleep(long long m_secs, t_params *params)
 			return (0);
 	}
 	return(0);
-}
-
-void	print_status(t_philo *philo, char *status)
-{
-	pthread_mutex_lock(&philo->params->print);
-	printf("[%7lldms] philosopher[%03d] %s\n",
-		get_timestamp() - philo->start, philo->id, status);
-		// get_timestamp() - philo->params->start, philo->id, status);
-	pthread_mutex_unlock(&philo->params->print);
 }
 
 int	error_code_free_exit(int code, t_params *params)
@@ -101,6 +92,9 @@ int	main(int argc, char **argv)
 		return (error_code_free_exit(4, params));
 	params->forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * params->num_of_philos);
 	if (!params->forks)
+		return (error_code_free_exit(4, params));
+	params->thread = (pthread_t *)malloc(sizeof(pthread_t) * params->num_of_philos);
+	if (!params->thread)
 		return (error_code_free_exit(4, params));
 	philos_init(params);
 	if (mutex_init(params))

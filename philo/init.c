@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/01 04:48:21 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/05/04 05:46:14 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/05/05 03:15:06 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ void	philos_init(t_params *params)
 			params->philo[id].left_fork = id + 1;
 		else
 			params->philo[id].left_fork = 0;
-		params->philo[id].start = 0;
 		params->philo[id].params = params;
 		id++;
 	}
