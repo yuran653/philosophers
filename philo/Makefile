@@ -6,13 +6,14 @@
 #    By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/27 02:09:10 by jgoldste          #+#    #+#              #
-#    Updated: 2022/05/01 04:48:17 by jgoldste         ###   ########.fr        #
+#    Updated: 2022/05/05 22:25:25 by jgoldste         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		=	philo
 
-SRCS		=	philo.c		validation.c	init.c		launch.c
+SRCS		=	philo.c		validation.c	init.c		launch.c\
+				utils.c		error.c
 
 HEADER		=	philo.h
 

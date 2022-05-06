@@ -6,105 +6,112 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/29 01:53:06 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/05/05 06:25:20 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/05/06 05:51:45 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-// void	print_status(t_philo *philo, char *status)
+// static void	philo_is_sleeping(t_philo *philo, t_params *params)
 // {
-// 	t_params *params;
-
-// 	params = philo->params;	
 // 	pthread_mutex_lock(&params->print);
-// 	printf("[%7lldms] philosopher[%03d] %s\n",
-// 		// get_timestamp() - philo->start, philo->id, status);
-// 		get_timestamp() - params->start, philo->id, status);
+// 	printf("[%7lldms] philosopher [%3d] is sleeping\n",
+// 		get_timestamp() - philo->start, philo->id);
 // 	pthread_mutex_unlock(&params->print);
+// 	ft_sleep(params->time_to_sleep, params);
+// 	(void) params;
 // }
 
-void	philo_is_sleeping(t_philo *philo, t_params *params)
+static void	philo_is_eating(t_philo *philo, t_params *params)
 {
-	printf("[%7lums] philosopher[%03d] is sleeping\n", get_timestamp() - params->start, philo->id);
-	ft_sleep(params->time_to_sleep, params);
-}
-
-void	philo_is_eating(t_philo *philo, t_params *params)
-{
+	// pthread_mutex_lock(&params->print);
 	pthread_mutex_lock(&params->forks[philo->right_fork]);
-	printf("[%7lums] philosopher[%03d] has taken right fork\n", get_timestamp() - params->start, philo->id);
+	// pthread_mutex_lock(&params->print);
+	printf("[%7lldms] philosopher [%3d] has taken rigth fork [%3d]\n",
+		get_timestamp() - philo->start, philo->id, philo->right_fork);
+	// pthread_mutex_unlock(&params->print);
 	pthread_mutex_lock(&params->forks[philo->left_fork]);
-	printf("[%7lums] philosopher[%03d] has taken left fork\n", get_timestamp() - params->start, philo->id);
-	printf("[%7lums] philosopher[%03d] is eating\n", get_timestamp() - params->start, philo->id);
-	ft_sleep(params->time_to_eat - 1, params);
+	// pthread_mutex_lock(&params->print);
+	printf("[%7lldms] philosopher [%3d] has taken  left fork [%3d]\n",
+		get_timestamp() - philo->start, philo->id, philo->left_fork);
+	// pthread_mutex_unlock(&params->print);
+	philo->last_meal = get_timestamp();
+	// pthread_mutex_lock(&params->print);
+	// printf("[%7lldms] philosopher [%3d] is eating\n",
+	// 	philo->last_meal - philo->start, philo->id);
+	// pthread_mutex_unlock(&params->print);
 	philo->meals++;
+	ft_sleep(params->time_to_eat, params);
 	pthread_mutex_unlock(&params->forks[philo->right_fork]);
-	pthread_mutex_unlock(&params->forks[philo->left_fork]);
+	pthread_mutex_unlock(&params->forks[philo->left_fork]);	
 }
 
-void	*philo_living(void *ptr)
+static void	*philo_live(void *ptr)
 {
 	t_philo		*philo;
 	t_params	*params;
 	
 	philo = (t_philo *)ptr;
-	params = (t_params *)philo->params;
-	// philo->start = get_timestamp();
-	// while(params->start == -1)
-	// 	usleep(200);
-	printf("[%7lums] philosopher[%03d] is thinking\n", get_timestamp() - params->start, philo->id);
-	if (philo->id % 2 == 0)
-		// 	// usleep(15000);
-			ft_sleep(philo->params->time_to_eat - 1, philo->params);
-	while (1)
+	params = philo->params;
+	// if (philo->id % 2 == 0)
+	// {
+	// 	printf("[%7lldms] philosopher [%3d] is thinking\n",
+	// 		get_timestamp() - philo->start, philo->id);
+	// 	ft_sleep(params->time_to_eat, params);
+	// }
+	while (!params->philo_is_dead)
 	{
-		printf("[%7lums] philosopher[%03d] is thinking\n", get_timestamp() - params->start, philo->id);
-		// if (philo->params->philo_is_dead)
-		// 	return ((void *)philo);
-		if (philo->meals == 1)
-			return ((void *)philo);
-		// if (philo->id % 2 == 0)
-		// // 	// usleep(15000);
-		// 	ft_sleep(philo->params->time_to_eat - 1, philo->params);
+		if (philo->meals == params->times_must_eat)
+			return (NULL);
 		philo_is_eating(philo, params);
-		philo_is_sleeping(philo, params);
+		// philo_is_sleeping(philo, params);
+		// pthread_mutex_lock(&params->print);
+		// printf("[%7lldms] philosopher [%3d] is sleeping\n",
+		// 	get_timestamp() - philo->start, philo->id);
+		// pthread_mutex_unlock(&params->print);
+		ft_sleep(params->time_to_sleep, params);
+		// pthread_mutex_lock(&params->print);
+		// printf("[%7lldms] philosopher [%3d] is thinking\n",
+		// 	get_timestamp() - philo->start, philo->id);
+		// pthread_mutex_unlock(&params->print);
 	}
-	return ((void *)philo);
+	return (NULL);
+}
+
+void	*empty(void *ptr)
+{
+	(void) ptr;
+	return (NULL);
 }
 
 int	launch(t_params *params)
 {
-	int	id;
 	t_philo	*philo;
-		
+	int		id;
+
 	philo = params->philo;
-	// params->start = -1;
-	params->start = get_timestamp();
 	id = 0;
+	while(id < params->num_of_philos)
+	{
+		if (pthread_create(&params->thread[id], NULL, &philo_live, &philo[id]))
+			return (7);
+		// usleep(250);
+		id += 2;
+		// id++;
+	}
+	ft_sleep(params->time_to_eat, params);
+	id = 1;
 	while (id < params->num_of_philos)
 	{
-		if (pthread_create(&params->thread[id], NULL, &philo_living, &philo[id]))
+		if (pthread_create(&params->thread[id], NULL, &empty, NULL))
+		// if (pthread_create(&params->thread[id], NULL, &philo_live, &philo[id]))
 			return (7);
-		// usleep(50);
-		id++;
-		// id += 2;
+		usleep(250);
+		id += 2;
 	}
-	// params->start = get_timestamp();
-	// pthread_mutex_unlock(&params->th);
-	// ft_sleep(params->time_to_eat - 1, params);
-	// id = 1;
-	// while (id < params->num_of_philos)
-	// {
-	// 	if (pthread_create(&philo[id].thread, NULL, &philo_living, &philo[id]))
-	// 		return (7);
-	// 	usleep(50);
-	// 	id += 2;
-	// }
 	id = 0;
 	while (id < params->num_of_philos)
 		if (pthread_join(params->thread[id++], NULL))
 			return (8);
 	return (0);
 }
-

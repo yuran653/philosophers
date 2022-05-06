@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/01 04:48:21 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/05/05 03:15:06 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/05/06 05:20:32 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,24 @@ void	philos_init(t_params *params)
 			params->philo[id].left_fork = id + 1;
 		else
 			params->philo[id].left_fork = 0;
+		params->philo[id].start = get_timestamp();
 		params->philo[id].params = params;
 		id++;
 	}
+}
+
+int	malloc_arrays(t_params *params)
+{
+	params->philo = (t_philo *)malloc(sizeof(t_philo) * params->num_of_philos);
+	if (!params->philo)
+		return (4);
+	params->forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t)
+			* params->num_of_philos);
+	if (!params->forks)
+		return (4);
+	params->thread = (pthread_t *)malloc(sizeof(pthread_t)
+			* params->num_of_philos);
+	if (!params->thread)
+		return (4);
+	return (0);
 }
