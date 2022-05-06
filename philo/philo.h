@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 01:57:21 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/05/06 23:56:59 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/05/07 01:23:27 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,15 @@
 # include <sys/time.h>
 # include <unistd.h>
 
-typedef struct s_forks
+typedef union s_forks
 {
-	pthread_mutex_t *fork;
+	pthread_mutex_t	*fork;
 }	t_forks;
+
+typedef union s_print
+{
+	pthread_mutex_t	mut;
+}	t_print;
 
 typedef struct s_philo
 {
@@ -37,6 +42,7 @@ typedef struct s_philo
 	long long		last_meal;
 	long long		start;
 	t_forks			*forks;
+	t_print			*print;
 	struct s_params	*params;
 }	t_philo;
 
@@ -52,7 +58,8 @@ typedef struct s_params
 	pthread_t		*thread;
 	t_philo			*philo;
 	t_forks			*forks;
-	pthread_mutex_t	print;
+	t_print			*print;
+	// pthread_mutex_t	print;
 }	t_params;
 
 t_params	*validation(t_params *params, char **argv);

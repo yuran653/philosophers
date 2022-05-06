@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/01 04:48:21 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/05/06 23:56:31 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/05/07 01:29:25 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,8 @@ int	mutex_init(t_params *params)
 	while (id < params->num_of_philos)
 		if (pthread_mutex_init(&params->forks->fork[id++], NULL))
 			return (5);
-	if (pthread_mutex_init(&params->print, NULL))
+	// if (pthread_mutex_init(&params->print, NULL))
+	if (pthread_mutex_init(&params->print->mut, NULL))
 		return (5);
 	return (0);
 }
@@ -59,7 +60,8 @@ int	mutex_destroy(t_params *params)
 	while (id < params->num_of_philos)
 		if (pthread_mutex_destroy(&params->forks->fork[id++]))
 			return (6);
-	if (pthread_mutex_destroy(&params->print))
+	// if (pthread_mutex_destroy(&params->print))
+	if (pthread_mutex_destroy(&params->print->mut))
 		return (6);
 	return (0);
 }
@@ -84,6 +86,7 @@ void	philos_init(t_params *params)
 			params->philo[id].left_fork = 0;
 		params->philo[id].start = params->start;
 		params->philo[id].forks = params->forks;
+		params->philo[id].print = params->print;
 		params->philo[id].params = params;
 		id++;
 	}
@@ -92,6 +95,7 @@ void	philos_init(t_params *params)
 int	malloc_arrays(t_params *params)
 {
 	t_forks	*forks;
+	t_print	*print;
 	
 	params->philo = (t_philo *)malloc(sizeof(t_philo) * params->num_of_philos);
 	if (!params->philo)
@@ -108,5 +112,9 @@ int	malloc_arrays(t_params *params)
 	if (!forks->fork)
 		return (4);
 	params->forks = forks;
+	print = (t_print *)malloc(sizeof(t_print));
+	if (!print)
+		return (4);
+	params->print = print;
 	return (0);
 }
