@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 22:23:46 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/05/06 02:54:19 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/05/06 23:55:22 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ int	error_code_free_exit(int code, t_params *params)
 		free_null(params->philo);
 	if (params->thread)
 		free_null(params->thread);
+	if (params->forks->fork)
+		free_null(params->forks->fork);
 	if (params->forks)
 		free_null(params->forks);
 	if (params)

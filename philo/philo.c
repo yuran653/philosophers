@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 01:56:57 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/05/06 01:47:52 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/05/07 00:00:38 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ int	main(int argc, char **argv)
 		return (error_code_free_exit(4, params));
 	if (mutex_init(params))
 		return (error_code_free_exit(5, params));
+	params->start = get_timestamp();
 	philos_init(params);
 	err = launch(params);
 	if (mutex_destroy(params))
