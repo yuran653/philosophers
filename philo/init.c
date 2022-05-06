@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/01 04:48:21 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/05/06 05:20:32 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/05/06 20:51:09 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,16 @@ void	philos_init(t_params *params)
 	{
 		params->philo[id].id = id + 1;
 		params->philo[id].meals = 0;
+		params->philo[id].time_to_die = params->time_to_die;
+		params->philo[id].time_to_eat = params->time_to_eat;
+		params->philo[id].time_to_sleep = params->time_to_sleep;
+		params->philo[id].times_must_eat = params->times_must_eat;
 		params->philo[id].right_fork = id;
 		if (id < params->num_of_philos - 1)
 			params->philo[id].left_fork = id + 1;
 		else
 			params->philo[id].left_fork = 0;
-		params->philo[id].start = get_timestamp();
+		params->philo[id].start = params->start;
 		params->philo[id].params = params;
 		id++;
 	}
