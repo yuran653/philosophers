@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 02:08:26 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/05/07 01:20:14 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/05/07 02:58:14 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,8 @@ t_params	*validation(t_params *params, char **argv)
 	if (i == 5)
 		params->times_must_eat = 0;
 	params->philo_is_dead = 0;
+	params->death_time = -1;
+	params->dead_philo_id = -1;
 	params->start = -1;
 	params->thread = NULL;
 	params->philo = NULL;
