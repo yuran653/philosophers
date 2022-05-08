@@ -6,29 +6,15 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 22:23:46 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/05/07 02:28:03 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/05/08 05:25:43 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	error_code_free_exit(int code, t_params *params)
+static void	print_error(int code)
 {
-	if (params->philo)
-		free_null(params->philo);
-	if (params->thread)
-		free_null(params->thread);
-	if (params->forks->fork)
-		free_null(params->forks->fork);
-	if (params->forks)
-		free_null(params->forks);
-	if (params->print)
-		free_null(params->print);
-	if (params)
-		free_null(params);
-	if (code == 0)
-		return (0);
-	else if (code == 4)
+	if (code == 4)
 		write(2, "\e[1;31mERROR:\e[0m malloc allocation error\n", 43);
 	else if (code == 5)
 		write(2, "\e[1;31mERROR:\e[0m mutex initialization error\n", 46);
@@ -38,6 +24,25 @@ int	error_code_free_exit(int code, t_params *params)
 		write(2, "\e[1;31mERROR:\e[0m threads creating error\n", 42);
 	else if (code == 8)
 		write(2, "\e[1;31mERROR:\e[0m threads joining error\n", 41);
+}
+
+int	error_code_free_exit(int code, t_params *params)
+{
+	if (params->philo)
+		free_null(params->philo);
+	if (params->forks->fork)
+		free_null(params->forks->fork);
+	if (params->forks)
+		free_null(params->forks);
+	if (params->print)
+		free_null(params->print);
+	if (params->thread)
+		free_null(params->thread);
+	if (params)
+		free_null(params);
+	if (code == 0)
+		return (0);
+	print_error(code);
 	return (1);
 }
 
