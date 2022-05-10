@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/01 04:48:21 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/05/08 05:25:29 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/05/10 16:11:15 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ void	philos_init(t_params *params)
 			params->philo[id].left_fork = id + 1;
 		else
 			params->philo[id].left_fork = 0;
+		params->philo[id].death_time = params->time_to_die;
+		params->philo[id].last_meal = params->start;
 		params->philo[id].start = params->start;
 		params->philo[id].forks = params->forks;
 		params->philo[id].print = params->print;

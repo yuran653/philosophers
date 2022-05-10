@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 01:57:21 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/05/08 05:21:31 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/05/10 21:16:21 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ typedef struct s_philo
 	int				times_must_eat;
 	int				right_fork;
 	int				left_fork;
+	long long		death_time;
 	long long		last_meal;
 	long long		start;
 	t_forks			*forks;
@@ -54,6 +55,8 @@ typedef struct s_params
 	int				time_to_sleep;
 	int				times_must_eat;
 	int				philo_is_dead;
+	int				dead_philo_id;
+	long long		death_time;
 	long long		start;
 	t_philo			*philo;
 	t_forks			*forks;
@@ -68,7 +71,8 @@ int			mutex_init(t_params *params);
 int			mutex_destroy(t_params *params);
 int			launch(t_params *params);
 long long	get_timestamp(void);
-void		ft_sleep(size_t m_secs);
+int			ft_sleep(long long m_secs, t_params *params);
+void		print_status(t_philo *philo, char *action);
 void		free_null(void *ptr);
 int			error_code(int code);
 int			error_code_free_exit(int code, t_params *params);
