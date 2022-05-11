@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 22:23:46 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/05/11 17:23:05 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/05/11 19:13:29 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@ static void	print_error(int code)
 		write(2, "\e[1;31mERROR:\e[0m threads creating error\n", 42);
 	else if (code == 8)
 		write(2, "\e[1;31mERROR:\e[0m threads joining error\n", 41);
-	else if (code == 9)
-		write(2, "\e[1;31mERROR:\e[0m threads detach error\n", 41);
 }
 
 int	error_code_free_exit(int code, t_params *params)

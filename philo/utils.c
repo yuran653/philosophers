@@ -6,22 +6,24 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 22:24:43 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/05/11 18:17:25 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/05/11 18:52:13 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	mutex_unlock_return_1(pthread_mutex_t *mut)
+int	mutex_unlock_return_1(t_philo *philo)
 {
-	pthread_mutex_unlock(mut);
+	pthread_mutex_unlock(&philo->forks->fork[philo->right_fork]);
+	philo->right_lock = 0;
 	return (1);
 }
 
-int	mutex_unlock_return_2(pthread_mutex_t *mut1, pthread_mutex_t *mut2)
+int	mutex_unlock_return_2(t_philo *philo)
 {
-	pthread_mutex_unlock(mut1);
-	pthread_mutex_unlock(mut2);
+	pthread_mutex_unlock(&philo->forks->fork[philo->right_fork]);
+	philo->right_lock = 0;
+	pthread_mutex_unlock(&philo->forks->fork[philo->left_fork]);
 	return (1);
 }
 
@@ -72,4 +74,17 @@ int	ft_sleep(long long m_secs, t_params *params)
 // 		usleep(250);
 // 	}
 // 	return (0);
+// }
+
+// int	mutex_unlock_return_1(pthread_mutex_t *mut)
+// {
+// 	pthread_mutex_unlock(mut);
+// 	return (1);
+// }
+
+// int	mutex_unlock_return_2(pthread_mutex_t *mut1, pthread_mutex_t *mut2)
+// {
+// 	pthread_mutex_unlock(mut1);
+// 	pthread_mutex_unlock(mut2);
+// 	return (1);
 // }

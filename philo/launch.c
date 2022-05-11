@@ -6,11 +6,23 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/29 01:53:06 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/05/11 16:46:52 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/05/11 19:14:15 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+static void	unlock_right_fork(t_params *params)
+{
+	t_philo	*philo;
+	int		id;
+
+	philo = params->philo;
+	id = -1;
+	while (++id < params->num_of_philos)
+		if (params->philo[id].right_lock)
+			pthread_mutex_unlock(&philo[id].forks->fork[philo[id].right_fork]);
+}
 
 static void	*death_check(void *ptr)
 {
@@ -69,6 +81,7 @@ int	launch(t_params *params)
 		return (7);
 	if (pthread_join(death_t, NULL))
 		return (8);
+	unlock_right_fork(params);
 	id = 0;
 	while (id < params->num_of_philos)
 		if (pthread_join(params->thread[id++], NULL))
