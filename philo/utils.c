@@ -6,16 +6,36 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 22:24:43 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/05/10 20:13:16 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/05/11 12:45:26 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	free_null(void *ptr)
+int	mutex_unlock_return_1(pthread_mutex_t *mut)
 {
-	free(ptr);
-	ptr = NULL;
+	pthread_mutex_unlock(mut);
+	return (1);
+}
+
+int	mutex_unlock_return_2(pthread_mutex_t *mut1, pthread_mutex_t *mut2)
+{
+	pthread_mutex_unlock(mut1);
+	pthread_mutex_unlock(mut2);
+	return (1);
+}
+
+int	print_status(t_philo *philo, t_params *params, char *action)
+{
+	if (!params->philo_is_dead)
+	{
+		pthread_mutex_lock(&philo->print->mut);
+		printf("[%7lldms] philosopher [%3d] %s\n",
+			get_timestamp() - philo->start, philo->id, action);
+		pthread_mutex_unlock(&philo->print->mut);
+		return (0);
+	}
+	return (1);
 }
 
 long long	get_timestamp(void)

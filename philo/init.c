@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/01 04:48:21 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/05/10 16:11:15 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/05/11 12:50:22 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,14 +70,15 @@ int	malloc_arrays(t_params *params)
 {
 	t_forks	*forks;
 	t_print	*print;
-	
+
 	params->philo = (t_philo *)malloc(sizeof(t_philo) * params->num_of_philos);
 	if (!params->philo)
 		return (4);
 	forks = (t_forks *)malloc(sizeof(t_forks));
 	if (!forks)
 		return (4);
-	forks->fork = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * params->num_of_philos);
+	forks->fork = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t)
+			* params->num_of_philos);
 	if (!forks->fork)
 		return (4);
 	params->forks = forks;

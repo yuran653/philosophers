@@ -6,11 +6,17 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 22:23:46 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/05/08 05:25:43 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/05/11 12:42:05 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+void	free_null(void *ptr)
+{
+	free(ptr);
+	ptr = NULL;
+}
 
 static void	print_error(int code)
 {
