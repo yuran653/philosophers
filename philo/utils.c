@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 22:24:43 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/05/11 18:52:13 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/05/11 23:16:44 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,12 @@ int	print_status(t_philo *philo, t_params *params, char *action)
 	if (!params->philo_is_dead)
 	{
 		pthread_mutex_lock(&philo->print->mut);
-		printf("[%7lldms] philosopher [%3d] %s\n",
+		if (params->philo_is_dead)
+		{
+			pthread_mutex_unlock(&philo->print->mut);
+			return (1);
+		}
+		printf("\t[%7lldms] philosopher [%3d] %s\n",
 			get_timestamp() - philo->start, philo->id, action);
 		pthread_mutex_unlock(&philo->print->mut);
 		return (0);
@@ -74,17 +79,4 @@ int	ft_sleep(long long m_secs, t_params *params)
 // 		usleep(250);
 // 	}
 // 	return (0);
-// }
-
-// int	mutex_unlock_return_1(pthread_mutex_t *mut)
-// {
-// 	pthread_mutex_unlock(mut);
-// 	return (1);
-// }
-
-// int	mutex_unlock_return_2(pthread_mutex_t *mut1, pthread_mutex_t *mut2)
-// {
-// 	pthread_mutex_unlock(mut1);
-// 	pthread_mutex_unlock(mut2);
-// 	return (1);
 // }

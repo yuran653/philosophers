@@ -6,17 +6,23 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 02:08:26 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/05/11 12:53:09 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/05/11 23:04:06 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static t_params	*free_return(t_params *params)
+int	valid_args(t_params *params)
 {
-	free(params);
-	params = NULL;
-	return (params);
+	if (params->num_of_philos > 200)
+		return (1);
+	if (params->time_to_die < 60)
+		return (1);
+	if (params->time_to_eat < 60)
+		return (1);
+	if (params->time_to_sleep < 60)
+		return (1);
+	return (0);
 }
 
 static int	ft_atoi_ph(char *str, int *num)

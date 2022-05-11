@@ -6,13 +6,13 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/29 01:53:06 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/05/11 19:14:15 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/05/11 23:16:26 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static void	unlock_right_fork(t_params *params)
+static void	unlock_forks(t_params *params)
 {
 	t_philo	*philo;
 	int		id;
@@ -43,8 +43,8 @@ static void	*death_check(void *ptr)
 		{
 			params->philo_is_dead = 1;
 			pthread_mutex_lock(&params->print->mut);
-			printf("[%7lldms] philosopher [%3d] is died\n",
-				time - params->start, id);
+			printf("\t[%7lldms] philosopher [%3d] is died\n",
+				time - params->start, philo[id].id);
 			return (NULL);
 		}
 		usleep(50);
@@ -81,11 +81,11 @@ int	launch(t_params *params)
 		return (7);
 	if (pthread_join(death_t, NULL))
 		return (8);
-	unlock_right_fork(params);
+	unlock_forks(params);
+	pthread_mutex_unlock(&params->print->mut);
 	id = 0;
 	while (id < params->num_of_philos)
 		if (pthread_join(params->thread[id++], NULL))
 			return (8);
-	pthread_mutex_unlock(&params->print->mut);
 	return (0);
 }

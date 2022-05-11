@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 16:46:26 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/05/11 19:12:13 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/05/11 23:14:11 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	*philo_live(void *ptr)
 		if (params->philo_is_dead)
 			return (NULL);
 		if (philo->times_must_eat)
-			if (philo->meals == philo->times_must_eat)
+			if (philo->times_must_eat == philo->meals)
 				return (NULL);
 		if (philo_take_forks(philo, params))
 			return (NULL);

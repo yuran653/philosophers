@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 01:57:21 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/05/11 19:11:29 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/05/11 23:00:03 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ typedef struct s_params
 }	t_params;
 
 t_params	*validation(t_params *params, char **argv);
+int			valid_args(t_params *params);
 int			malloc_arrays(t_params *params, int size);
 void		philos_init(t_params *params);
 int			mutex_init(t_params *params);
@@ -76,6 +77,7 @@ int			print_status(t_philo *philo, t_params *params, char *action);
 int			mutex_unlock_return_1(t_philo *philo);
 int			mutex_unlock_return_2(t_philo *philo);
 void		free_null(void *ptr);
+t_params	*free_return(t_params *params);
 int			error_code(int code);
 int			error_code_free_exit(int code, t_params *params);
 

@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 22:23:46 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/05/11 19:13:29 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/05/11 23:07:58 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,18 @@ void	free_null(void *ptr)
 	ptr = NULL;
 }
 
+t_params	*free_return(t_params *params)
+{
+	free(params);
+	params = NULL;
+	return (params);
+}
+
 static void	print_error(int code)
 {
-	if (code == 4)
+	if (code == 3)
+		write(2, "\e[1;31mERROR:\e[0m arguments are not correct\n", 45);
+	else if (code == 4)
 		write(2, "\e[1;31mERROR:\e[0m malloc allocation error\n", 43);
 	else if (code == 5)
 		write(2, "\e[1;31mERROR:\e[0m mutex initialization error\n", 46);
@@ -36,10 +45,12 @@ int	error_code_free_exit(int code, t_params *params)
 {
 	if (params->philo)
 		free_null(params->philo);
-	if (params->forks->fork)
-		free_null(params->forks->fork);
 	if (params->forks)
+	{
+		if (params->forks->fork)
+			free_null(params->forks->fork);
 		free_null(params->forks);
+	}
 	if (params->print)
 		free_null(params->print);
 	if (params->thread)
