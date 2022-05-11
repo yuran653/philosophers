@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 01:57:21 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/05/11 12:52:57 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/05/11 18:18:04 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +63,12 @@ typedef struct s_params
 }	t_params;
 
 t_params	*validation(t_params *params, char **argv);
-int			malloc_arrays(t_params *params);
+int			malloc_arrays(t_params *params, int size);
 void		philos_init(t_params *params);
 int			mutex_init(t_params *params);
 int			mutex_destroy(t_params *params);
 int			launch(t_params *params);
+void		*philo_live(void *ptr);
 long long	get_timestamp(void);
 int			ft_sleep(long long m_secs, t_params *params);
 int			print_status(t_philo *philo, t_params *params, char *action);
