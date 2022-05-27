@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/01 04:48:21 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/05/11 19:13:10 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/05/27 23:59:58 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,13 @@ int	mutex_init(t_params *params)
 	while (id < params->num_of_philos)
 		if (pthread_mutex_init(&params->forks->fork[id++], NULL))
 			return (5);
+	id = 0;
+	while (id < params->num_of_philos)
+		if (pthread_mutex_init(&params->philo[id++].mut_death, NULL))
+			return (5);
 	if (pthread_mutex_init(&params->print->mut, NULL))
+		return (5);
+	if (pthread_mutex_init(&params->death->mut, NULL))
 		return (5);
 	return (0);
 }
@@ -33,7 +39,13 @@ int	mutex_destroy(t_params *params)
 	while (id < params->num_of_philos)
 		if (pthread_mutex_destroy(&params->forks->fork[id++]))
 			return (6);
+	id = 0;
+	while (id < params->num_of_philos)
+		if (pthread_mutex_destroy(&params->philo[id++].mut_death))
+			return (6);
 	if (pthread_mutex_destroy(&params->print->mut))
+		return (6);
+	if (pthread_mutex_destroy(&params->death->mut))
 		return (6);
 	return (0);
 }
@@ -55,7 +67,6 @@ void	philos_init(t_params *params)
 		params->philo[id].left_fork = 0;
 		if (id < params->num_of_philos - 1)
 			params->philo[id].left_fork = id + 1;
-		params->philo[id].right_lock = 0;
 		params->philo[id].death_time = params->time_to_die;
 		params->philo[id].last_meal = params->start;
 		params->philo[id].start = params->start;
@@ -66,27 +77,40 @@ void	philos_init(t_params *params)
 	}
 }
 
+static int	malloc_mutex(t_params *params)
+{
+	t_print	*print;
+	t_death	*death;
+
+	print = (t_print *)malloc(sizeof(t_print));
+	if (!print)
+		return (4);
+	params->print = print;
+	death = (t_death *)malloc(sizeof(t_death));
+	if (!death)
+		return (4);
+	params->death = death;
+	return (0);
+}
+
 int	malloc_arrays(t_params *params, int size)
 {
 	t_forks	*forks;
-	t_print	*print;
 
 	params->philo = (t_philo *)malloc(sizeof(t_philo) * size);
 	if (!params->philo)
 		return (4);
-	forks = (t_forks *)malloc(sizeof(t_forks));
+	forks = (t_forks *)malloc(sizeof(t_forks) * size);
 	if (!forks)
 		return (4);
 	params->forks = forks;
 	forks->fork = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * size);
 	if (!forks->fork)
 		return (4);
-	print = (t_print *)malloc(sizeof(t_print));
-	if (!print)
-		return (4);
-	params->print = print;
 	params->thread = (pthread_t *)malloc(sizeof(pthread_t) * size);
 	if (!params->thread)
+		return (4);
+	if (malloc_mutex(params))
 		return (4);
 	return (0);
 }
