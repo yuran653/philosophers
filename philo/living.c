@@ -6,11 +6,21 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 16:46:26 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/05/28 00:13:01 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/05/28 20:43:38 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+static void	check_meals(t_philo *philo, t_params *params)
+{
+	if (philo->meals == philo->times_must_eat)
+	{
+		pthread_mutex_lock(&philo->meals_mut->mut);
+		params->philos_had_eaten++;
+		pthread_mutex_unlock(&philo->meals_mut->mut);
+	}
+}
 
 static int	philo_is_living(t_philo *philo, t_params *params, long long time)
 {
@@ -25,6 +35,8 @@ static int	philo_is_living(t_philo *philo, t_params *params, long long time)
 		return (mutex_unlock_return_2(philo));
 	pthread_mutex_unlock(&philo->forks->fork[philo->right_fork]);
 	pthread_mutex_unlock(&philo->forks->fork[philo->left_fork]);
+	if (philo->times_must_eat)
+		check_meals(philo, params);
 	if (print_status(philo, params, "is sleeping"))
 		return (1);
 	if (ft_sleep(philo->time_to_sleep, params))
@@ -39,13 +51,13 @@ static int	is_philo_dead(t_philo *philo, t_params *params, long long time)
 	{
 		pthread_mutex_unlock(&philo->mut_death);
 		pthread_mutex_lock(&params->death->mut);
-		params->philo_is_dead = 1;
+		params->philo_exit = 1;
 		pthread_mutex_unlock(&params->death->mut);
 		return (1);
 	}
 	pthread_mutex_unlock(&philo->mut_death);
 	pthread_mutex_lock(&params->death->mut);
-	if (params->philo_is_dead == 1)
+	if (params->philo_exit == 1)
 	{
 		pthread_mutex_unlock(&params->death->mut);
 		return (1);
@@ -59,7 +71,7 @@ static int	philo_take_forks(t_philo *philo, t_params *params)
 	long long	time_stamp;
 
 	pthread_mutex_lock(&params->death->mut);
-	if (params->philo_is_dead)
+	if (params->philo_exit)
 	{
 		pthread_mutex_unlock(&params->death->mut);
 		return (1);
@@ -77,12 +89,6 @@ static int	philo_take_forks(t_philo *philo, t_params *params)
 	return (philo_is_living(philo, params, time_stamp));
 }
 
-static void	philo_is_thinking(t_philo *philo, t_params *params)
-{
-	print_status(philo, params, "is thinking");
-	usleep((philo->time_to_eat - 1) * 990);
-}
-
 void	*philo_live(void *ptr)
 {
 	t_philo		*philo;
@@ -91,19 +97,19 @@ void	*philo_live(void *ptr)
 	philo = (t_philo *)ptr;
 	params = philo->params;
 	if (philo->id % 2 == 0)
-		philo_is_thinking(philo, params);
+	{
+		print_status(philo, params, "is thinking");
+		usleep((philo->time_to_eat - 1) * 990);
+	}
 	while (1)
 	{
 		pthread_mutex_lock(&params->death->mut);
-		if (params->philo_is_dead)
+		if (params->philo_exit)
 		{
 			pthread_mutex_unlock(&params->death->mut);
 			return (NULL);
 		}
 		pthread_mutex_unlock(&params->death->mut);
-		if (philo->times_must_eat)
-			if (philo->times_must_eat == philo->meals)
-				return (NULL);
 		if (philo_take_forks(philo, params))
 			return (NULL);
 		if (print_status(philo, params, "is thinking"))

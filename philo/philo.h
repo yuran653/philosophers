@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 01:57:21 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/05/28 00:10:28 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/05/28 20:20:26 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,11 @@ typedef union s_death
 	pthread_mutex_t	mut;
 }	t_death;
 
+typedef union s_meals
+{
+	pthread_mutex_t	mut;
+}	t_meals;
+
 typedef struct s_philo
 {
 	int				id;
@@ -49,6 +54,7 @@ typedef struct s_philo
 	long long		start;
 	t_forks			*forks;
 	t_print			*print;
+	t_meals			*meals_mut;
 	struct s_params	*params;
 	pthread_mutex_t	mut_death;
 }	t_philo;
@@ -60,12 +66,14 @@ typedef struct s_params
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				times_must_eat;
-	int				philo_is_dead;
+	int				philo_exit;
+	int				philos_had_eaten;
 	long long		start;
 	t_philo			*philo;
 	t_forks			*forks;
 	t_print			*print;
 	t_death			*death;
+	t_meals			*meals_mut;
 	pthread_t		*thread;
 }	t_params;
 

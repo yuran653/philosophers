@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 22:24:43 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/05/28 00:27:40 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/05/28 20:02:25 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	print_status(t_philo *philo, t_params *params, char *action)
 {
 	pthread_mutex_lock(&params->print->mut);
 	pthread_mutex_lock(&params->death->mut);
-	if (!params->philo_is_dead)
+	if (!params->philo_exit)
 	{
 		pthread_mutex_unlock(&params->death->mut);
 		printf("\t[%7lldms] philosopher [%3d] %s\n",
@@ -58,7 +58,7 @@ int	ft_sleep(long long m_secs, t_params *params)
 	while (get_timestamp() < stop)
 	{
 		pthread_mutex_lock(&params->death->mut);
-		if (params->philo_is_dead)
+		if (params->philo_exit)
 		{
 			pthread_mutex_unlock(&params->death->mut);
 			return (1);
@@ -76,7 +76,7 @@ int	ft_sleep(long long m_secs, t_params *params)
 // 	start = get_timestamp();
 // 	while (get_timestamp() < start + m_secs)
 // 	{
-// 		if (params->philo_is_dead)
+// 		if (params->philo_exit)
 // 			return (1);
 // 		usleep(250);
 // 	}

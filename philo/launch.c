@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/29 01:53:06 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/05/28 00:10:12 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/05/28 20:44:36 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static int	philo_is_died(t_philo *philo, t_params *params, int id)
 	{
 		pthread_mutex_unlock(&philo[id].mut_death);
 		pthread_mutex_lock(&params->death->mut);
-		params->philo_is_dead = 1;
+		params->philo_exit = 1;
 		pthread_mutex_unlock(&params->death->mut);
 		pthread_mutex_lock(&params->print->mut);
 		printf("\t[%7lldms] philosopher [%3d] is died\n",
@@ -31,7 +31,22 @@ static int	philo_is_died(t_philo *philo, t_params *params, int id)
 	return (0);
 }
 
-static void	*death_check(void *ptr)
+static int	check_philos_had_eaten(t_philo *philo, t_params *params)
+{
+	pthread_mutex_lock(&philo->meals_mut->mut);
+	if (params->philos_had_eaten == params->num_of_philos)
+	{
+		pthread_mutex_lock(&params->death->mut);
+		params->philo_exit = 1;
+		pthread_mutex_unlock(&params->death->mut);
+		pthread_mutex_unlock(&philo->meals_mut->mut);
+		return (1);
+	}
+	pthread_mutex_unlock(&philo->meals_mut->mut);
+	return (0);
+}
+
+static void	*death_meals_check(void *ptr)
 {
 	t_params	*params;
 	t_philo		*philo;
@@ -43,7 +58,11 @@ static void	*death_check(void *ptr)
 	while (id <= params->num_of_philos)
 	{
 		if (id == params->num_of_philos)
+		{
 			id = 0;
+			if (check_philos_had_eaten(philo, params))
+				return (NULL);
+		}
 		pthread_mutex_lock(&philo[id].mut_death);
 		if (philo_is_died(philo, params, id))
 			return (NULL);
@@ -79,7 +98,7 @@ int	launch(t_params *params)
 	num = params->num_of_philos;
 	if (create_threads(th, philo, num, 0) || create_threads(th, philo, num, 1))
 		return (7);
-	if (pthread_create(&death_t, NULL, &death_check, params))
+	if (pthread_create(&death_t, NULL, &death_meals_check, params))
 		return (7);
 	if (pthread_join(death_t, NULL))
 		return (8);
