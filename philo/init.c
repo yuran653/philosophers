@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/01 04:48:21 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/05/28 20:22:31 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/05/30 13:39:56 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	mutex_init(t_params *params)
 			return (5);
 	if (pthread_mutex_init(&params->print->mut, NULL))
 		return (5);
-	if (pthread_mutex_init(&params->death->mut, NULL))
+	if (pthread_mutex_init(&params->exit->mut, NULL))
 		return (5);
 	if (pthread_mutex_init(&params->meals_mut->mut, NULL))
 		return (5);
@@ -47,7 +47,7 @@ int	mutex_destroy(t_params *params)
 			return (6);
 	if (pthread_mutex_destroy(&params->print->mut))
 		return (6);
-	if (pthread_mutex_destroy(&params->death->mut))
+	if (pthread_mutex_destroy(&params->exit->mut))
 		return (6);
 	if (pthread_mutex_destroy(&params->meals_mut->mut))
 		return (6);
@@ -85,17 +85,17 @@ void	philos_init(t_params *params)
 static int	malloc_mutex(t_params *params)
 {
 	t_print	*print;
-	t_death	*death;
+	t_exit	*exit;
 	t_meals	*meals_mut;
 
 	print = (t_print *)malloc(sizeof(t_print));
 	if (!print)
 		return (4);
 	params->print = print;
-	death = (t_death *)malloc(sizeof(t_death));
-	if (!death)
+	exit = (t_exit *)malloc(sizeof(t_exit));
+	if (!exit)
 		return (4);
-	params->death = death;
+	params->exit = exit;
 	meals_mut = (t_meals *)malloc(sizeof(t_meals));
 	if (!meals_mut)
 		return (4);

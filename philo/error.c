@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 22:23:46 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/05/28 20:22:44 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/05/30 13:38:57 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,8 @@ int	error_code_free_exit(int code, t_params *params)
 	}
 	if (params->print)
 		free_null(params->print);
-	if (params->death)
-		free_null(params->death);
+	if (params->exit)
+		free_null(params->exit);
 	if (params->meals_mut)
 		free_null(params->meals_mut);
 	if (params->thread)
