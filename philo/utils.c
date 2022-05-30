@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 22:24:43 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/05/30 16:14:12 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/05/30 18:30:37 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,7 @@ int	print_status(t_philo *philo, t_params *params, char *action)
 	if (!params->philo_exit)
 	{
 		pthread_mutex_unlock(&params->exit->mut);
-		// printf("\t[%7lldms] philosopher [%3d] %s\n",
-		printf("%lld %d %s\n",
+		printf("\t[%7lldms] philosopher [%3d] %s\n",
 			get_timestamp() - philo->start, philo->id, action);
 		pthread_mutex_unlock(&params->print->mut);
 		return (0);
@@ -69,6 +68,8 @@ int	ft_sleep(long long m_secs, t_params *params)
 	}
 	return (0);
 }
+
+// printf("%lld %d %s\n",
 
 // int	ft_sleep(long long m_secs, t_params *params)
 // {

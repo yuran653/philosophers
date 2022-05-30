@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/29 01:53:06 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/05/30 16:57:00 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/05/30 18:30:55 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,7 @@ static int	philo_died(t_philo *philo, t_params *params, int id)
 		params->philo_exit = 1;
 		pthread_mutex_unlock(&params->exit->mut);
 		pthread_mutex_lock(&params->print->mut);
-		// printf("\t[%7lldms] philosopher [%3d] died\n",
-		printf("%lld %d died\n",
+		printf("\t[%7lldms] philosopher [%3d] died\n",
 			time - params->start, philo[id].id);
 		return (1);
 	}
@@ -112,3 +111,5 @@ int	launch(t_params *params)
 			return (8);
 	return (0);
 }
+
+// printf("%lld %d died\n",

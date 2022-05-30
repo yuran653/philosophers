@@ -6,7 +6,7 @@
 #    By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/27 02:09:10 by jgoldste          #+#    #+#              #
-#    Updated: 2022/05/30 17:21:30 by jgoldste         ###   ########.fr        #
+#    Updated: 2022/05/30 18:16:22 by jgoldste         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ D_FILES		=	$(patsubst %.c,%.d,$(SRCS))
 
 INCLUDES	=	-I.
 
-CFLAGS		=	-Wall -Wextra -Werror -g -fsanitize=thread
+CFLAGS		=	-Wall -Wextra -Werror -g# -fsanitize=thread
 
 CC			=	gcc
 
