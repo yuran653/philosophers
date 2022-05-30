@@ -6,18 +6,14 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 16:46:26 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/05/30 14:53:56 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/05/30 16:50:41 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static int	philo_is_living(t_philo *philo, t_params *params, long long time)
+static int	philo_is_living(t_philo *philo, t_params *params)
 {
-	philo->last_meal = time;
-	pthread_mutex_lock(&philo->mut_death);
-	philo->death_time = philo->last_meal + philo->time_to_die;
-	pthread_mutex_unlock(&philo->mut_death);
 	if (print_status(philo, params, "is eating"))
 		return (mutex_unlock_return_2(philo));
 	if (ft_sleep(philo->time_to_eat, params))
@@ -57,6 +53,10 @@ static int	is_philo_dead(t_philo *philo, t_params *params, long long time)
 		return (1);
 	}
 	pthread_mutex_unlock(&params->exit->mut);
+	philo->last_meal = time;
+	pthread_mutex_lock(&philo->mut_death);
+	philo->death_time = philo->last_meal + philo->time_to_die;
+	pthread_mutex_unlock(&philo->mut_death);
 	return (0);
 }
 
@@ -80,7 +80,7 @@ static int	philo_take_forks(t_philo *philo, t_params *params)
 	time_stamp = get_timestamp() - philo->start;
 	if (is_philo_dead(philo, params, time_stamp))
 		return (mutex_unlock_return_2(philo));
-	return (philo_is_living(philo, params, time_stamp));
+	return (philo_is_living(philo, params));
 }
 
 void	*philo_live(void *ptr)
@@ -90,7 +90,7 @@ void	*philo_live(void *ptr)
 
 	philo = (t_philo *)ptr;
 	params = philo->params;
-	if (philo->id % 2 == 0)
+	if (philo->id % 2 != 0)
 	{
 		print_status(philo, params, "is thinking");
 		usleep((philo->time_to_eat - 1) * 990);

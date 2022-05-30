@@ -6,13 +6,13 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/29 01:53:06 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/05/30 13:40:15 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/05/30 16:57:00 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static int	philo_is_died(t_philo *philo, t_params *params, int id)
+static int	philo_died(t_philo *philo, t_params *params, int id)
 {
 	long long	time;
 
@@ -24,7 +24,8 @@ static int	philo_is_died(t_philo *philo, t_params *params, int id)
 		params->philo_exit = 1;
 		pthread_mutex_unlock(&params->exit->mut);
 		pthread_mutex_lock(&params->print->mut);
-		printf("\t[%7lldms] philosopher [%3d] is died\n",
+		// printf("\t[%7lldms] philosopher [%3d] died\n",
+		printf("%lld %d died\n",
 			time - params->start, philo[id].id);
 		return (1);
 	}
@@ -64,7 +65,7 @@ static void	*death_meals_check(void *ptr)
 				return (NULL);
 		}
 		pthread_mutex_lock(&philo[id].mut_death);
-		if (philo_is_died(philo, params, id))
+		if (philo_died(philo, params, id))
 			return (NULL);
 		pthread_mutex_unlock(&philo[id].mut_death);
 		usleep(50);
@@ -96,7 +97,7 @@ int	launch(t_params *params)
 	philo = params->philo;
 	th = params->thread;
 	num = params->num_of_philos;
-	if (create_threads(th, philo, num, 0) || create_threads(th, philo, num, 1))
+	if (create_threads(th, philo, num, 1) || create_threads(th, philo, num, 0))
 		return (7);
 	if (pthread_create(&death_t, NULL, &death_meals_check, params))
 		return (7);

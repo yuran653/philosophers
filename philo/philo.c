@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 01:56:57 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/05/30 15:15:08 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/05/30 16:03:13 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ int	main(int argc, char **argv)
 		return (error_code_free_exit(5, params));
 	philos_init(params);
 	err = launch(params);
-	print_meals(params);
 	if (mutex_destroy(params))
 		return (error_code_free_exit(6, params));
 	return (error_code_free_exit(err, params));
