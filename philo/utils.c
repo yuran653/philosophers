@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 22:24:43 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/05/30 18:30:37 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/06/01 01:53:13 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,17 +70,3 @@ int	ft_sleep(long long m_secs, t_params *params)
 }
 
 // printf("%lld %d %s\n",
-
-// int	ft_sleep(long long m_secs, t_params *params)
-// {
-// 	long long	start;
-
-// 	start = get_timestamp();
-// 	while (get_timestamp() < start + m_secs)
-// 	{
-// 		if (params->philo_exit)
-// 			return (1);
-// 		usleep(250);
-// 	}
-// 	return (0);
-// }
