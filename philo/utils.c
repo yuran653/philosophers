@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 22:24:43 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/06/01 01:53:13 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/06/01 21:16:13 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,17 +28,17 @@ int	mutex_unlock_return_2(t_philo *philo)
 int	print_status(t_philo *philo, t_params *params, char *action)
 {
 	pthread_mutex_lock(&params->print->mut);
-	pthread_mutex_lock(&params->exit->mut);
+	pthread_mutex_lock(&params->stop->mut);
 	if (!params->philo_exit)
 	{
-		pthread_mutex_unlock(&params->exit->mut);
+		pthread_mutex_unlock(&params->stop->mut);
 		printf("\t[%7lldms] philosopher [%3d] %s\n",
 			get_timestamp() - philo->start, philo->id, action);
 		pthread_mutex_unlock(&params->print->mut);
 		return (0);
 	}
 	pthread_mutex_unlock(&params->print->mut);
-	pthread_mutex_unlock(&params->exit->mut);
+	pthread_mutex_unlock(&params->stop->mut);
 	return (1);
 }
 
@@ -57,13 +57,13 @@ int	ft_sleep(long long m_secs, t_params *params)
 	stop = get_timestamp() + m_secs;
 	while (get_timestamp() < stop)
 	{
-		pthread_mutex_lock(&params->exit->mut);
+		pthread_mutex_lock(&params->stop->mut);
 		if (params->philo_exit)
 		{
-			pthread_mutex_unlock(&params->exit->mut);
+			pthread_mutex_unlock(&params->stop->mut);
 			return (1);
 		}
-		pthread_mutex_unlock(&params->exit->mut);
+		pthread_mutex_unlock(&params->stop->mut);
 		usleep(500);
 	}
 	return (0);

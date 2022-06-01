@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 02:08:26 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/05/30 13:38:03 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/06/01 21:16:13 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ t_params	*validation(t_params *params, char **argv)
 	params->philo = NULL;
 	params->forks = NULL;
 	params->print = NULL;
-	params->exit = NULL;
+	params->stop = NULL;
 	params->meals_mut = NULL;
 	params->thread = NULL;
 	return (params);

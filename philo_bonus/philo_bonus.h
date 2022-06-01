@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 06:28:44 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/06/01 06:28:47 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/06/01 21:13:15 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,10 @@
 # include <stdlib.h>
 # include <sys/time.h>
 # include <unistd.h>
+
+# define FROKS forks
+# define PRINT print
+# define 
 
 typedef struct s_philo
 {

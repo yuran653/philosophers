@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/29 01:53:06 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/05/30 21:48:13 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/06/01 21:16:13 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ static int	philo_died(t_philo *philo, t_params *params, int id)
 	if (philo[id].death_time < time - philo[id].start)
 	{
 		pthread_mutex_unlock(&philo[id].mut_death);
-		pthread_mutex_lock(&params->exit->mut);
+		pthread_mutex_lock(&params->stop->mut);
 		params->philo_exit = 1;
-		pthread_mutex_unlock(&params->exit->mut);
+		pthread_mutex_unlock(&params->stop->mut);
 		pthread_mutex_lock(&params->print->mut);
 		printf("\t[%7lldms] philosopher [%3d] died\n",
 			time - params->start, philo[id].id);
@@ -36,9 +36,9 @@ static int	check_philos_had_eaten(t_philo *philo, t_params *params)
 	pthread_mutex_lock(&philo->meals_mut->mut);
 	if (params->philos_had_eaten == params->num_of_philos)
 	{
-		pthread_mutex_lock(&params->exit->mut);
+		pthread_mutex_lock(&params->stop->mut);
 		params->philo_exit = 1;
-		pthread_mutex_unlock(&params->exit->mut);
+		pthread_mutex_unlock(&params->stop->mut);
 		pthread_mutex_unlock(&philo->meals_mut->mut);
 		return (1);
 	}

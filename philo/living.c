@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 16:46:26 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/05/30 16:50:41 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/06/01 21:16:13 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,19 +40,19 @@ static int	is_philo_dead(t_philo *philo, t_params *params, long long time)
 	if (philo->death_time < time - params->start)
 	{
 		pthread_mutex_unlock(&philo->mut_death);
-		pthread_mutex_lock(&params->exit->mut);
+		pthread_mutex_lock(&params->stop->mut);
 		params->philo_exit = 1;
-		pthread_mutex_unlock(&params->exit->mut);
+		pthread_mutex_unlock(&params->stop->mut);
 		return (1);
 	}
 	pthread_mutex_unlock(&philo->mut_death);
-	pthread_mutex_lock(&params->exit->mut);
+	pthread_mutex_lock(&params->stop->mut);
 	if (params->philo_exit == 1)
 	{
-		pthread_mutex_unlock(&params->exit->mut);
+		pthread_mutex_unlock(&params->stop->mut);
 		return (1);
 	}
-	pthread_mutex_unlock(&params->exit->mut);
+	pthread_mutex_unlock(&params->stop->mut);
 	philo->last_meal = time;
 	pthread_mutex_lock(&philo->mut_death);
 	philo->death_time = philo->last_meal + philo->time_to_die;
@@ -64,13 +64,13 @@ static int	philo_take_forks(t_philo *philo, t_params *params)
 {
 	long long	time_stamp;
 
-	pthread_mutex_lock(&params->exit->mut);
+	pthread_mutex_lock(&params->stop->mut);
 	if (params->philo_exit)
 	{
-		pthread_mutex_unlock(&params->exit->mut);
+		pthread_mutex_unlock(&params->stop->mut);
 		return (1);
 	}
-	pthread_mutex_unlock(&params->exit->mut);
+	pthread_mutex_unlock(&params->stop->mut);
 	pthread_mutex_lock(&philo->forks->fork[philo->right_fork]);
 	if (print_status(philo, params, "has taken a fork"))
 		return (mutex_unlock_return_1(philo));
@@ -97,13 +97,13 @@ void	*philo_live(void *ptr)
 	}
 	while (1)
 	{
-		pthread_mutex_lock(&params->exit->mut);
+		pthread_mutex_lock(&params->stop->mut);
 		if (params->philo_exit)
 		{
-			pthread_mutex_unlock(&params->exit->mut);
+			pthread_mutex_unlock(&params->stop->mut);
 			return (NULL);
 		}
-		pthread_mutex_unlock(&params->exit->mut);
+		pthread_mutex_unlock(&params->stop->mut);
 		if (philo_take_forks(philo, params))
 			return (NULL);
 		if (print_status(philo, params, "is thinking"))
