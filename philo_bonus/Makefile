@@ -6,14 +6,14 @@
 #    By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/01 06:28:38 by jgoldste          #+#    #+#              #
-#    Updated: 2022/06/01 06:28:50 by jgoldste         ###   ########.fr        #
+#    Updated: 2022/06/01 21:28:59 by jgoldste         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		=	philo_bonus
 
 SRCS		=	philo_bonus.c	validation.c	init.c		utils.c		error.c\
-#				launch.c		living.c	
+				launch.c		living.c	
 
 HEADER		=	philo_bonus.h
 
@@ -42,14 +42,14 @@ all			:	$(NAME)
 
 $(NAME)		:	$(OBJS)
 				$(CC) $(CFLAGS) $(INCLUDES) -o $(NAME) $(OBJS)
-				@echo ${GREEN} "\n\tPhilosophers is compiled\n" ${END}
+				@echo ${GREEN} "\n\tPhilosophers bonus is compiled\n" ${END}
 
 clean		:	
 				@$(RM) $(OBJS) $(D_FILES)
-				@echo ${YELLOW} "\n\tPhilosophers 'clean' status: DONE\n" ${END}
+				@echo ${YELLOW} "\n\tPhilosophers bonus 'clean' status: DONE\n" ${END}
 				
 fclean		:	clean
 				@$(RM) $(NAME)
-				@echo ${YELLOW} "\n\tPhilosophers 'fclean' status: DONE\n" ${END}
+				@echo ${YELLOW} "\n\tPhilosophers bonus 'fclean' status: DONE\n" ${END}
 
 re			:	fclean all

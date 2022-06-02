@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 06:29:32 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/06/01 06:29:33 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/06/02 05:02:17 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,21 +31,24 @@ static void	print_error(int code)
 		write(2, "\e[1;31mERROR:\e[0m arguments are not correct\n", 45);
 	else if (code == 4)
 		write(2, "\e[1;31mERROR:\e[0m malloc allocation error\n", 43);
-		
 	else if (code == 5)
-		write(2, "\e[1;31mERROR:\e[0m mutex initialization error\n", 46);
+		write(2, "\e[1;31mERROR:\e[0m semaphore open error\n", 40);
 	else if (code == 6)
-		write(2, "\e[1;31mERROR:\e[0m mutex destroy error\n", 39);
+		write(2, "\e[1;31mERROR:\e[0m semaphore close error\n", 41);
 	else if (code == 7)
-		write(2, "\e[1;31mERROR:\e[0m threads creating error\n", 42);
-	else if (code == 8)
-		write(2, "\e[1;31mERROR:\e[0m threads joining error\n", 41);
+		write(2, "\e[1;31mERROR:\e[0m process creating error\n", 42);
+	// else if (code == 8)
+	// 	write(2, "\e[1;31mERROR:\e[0m threads joining error\n", 41);
 }
 
 int	error_code_free_exit(int code, t_params *params)
 {
+	print_error(code);
+	code = ft_sem_close(params);
 	if (params->philo)
 		free_null(params->philo);
+	if (params->pid)
+		free_null(params->pid);
 	if (params)
 		free_null(params);
 	if (code == 0)

@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 06:28:44 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/06/01 21:13:15 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/06/02 06:54:37 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,14 @@
 # include <sys/time.h>
 # include <unistd.h>
 
-# define FROKS forks
-# define PRINT print
-# define 
+#include <errno.h>
+#include <string.h>
+
+# define FORKS "forks"
+# define PRINT "print"
+# define STOP "stop"
+# define MEALS_SEM "meals_sem"
+# define DEATH_SEM "death_sem"
 
 typedef struct s_philo
 {
@@ -32,7 +37,7 @@ typedef struct s_philo
 	int				meals;
 	long long		death_time;
 	long long		last_meal;
-	sem_t			death_sem;
+	sem_t			*death_sem;
 }	t_philo;
 
 typedef struct s_params
@@ -45,24 +50,27 @@ typedef struct s_params
 	int				philo_exit;
 	int				philos_had_eaten;
 	long long		start;
-	sem_t			forks;
-	sem_t			print;
-	sem_t			exit;
-	sem_t			meals_sem;
+	sem_t			*forks;
+	sem_t			*print;
+	sem_t			*stop;
+	sem_t			*meals_sem;
+	pid_t			*pid;
 	t_philo			*philo;
 }	t_params;
 
 t_params	*validation(t_params *params, char **argv);
 int			valid_args(t_params *params);
+int			malloc_pid(t_params *params);
 int			init_philo(t_params *params);
+int			init_sem(t_params *params);
+int			ft_sem_close(t_params *params);
 
-int			launch(t_params *params);
-void		*philo_live(void *ptr);
+int			launch(t_philo *philo, t_params *params);
+int			philo_live(t_philo *philo, t_params *params);
+
 long long	get_timestamp(void);
 int			ft_sleep(long long m_secs, t_params *params);
 int			print_status(t_philo *philo, t_params *params, char *action);
-int			mutex_unlock_return_1(t_philo *philo);
-int			mutex_unlock_return_2(t_philo *philo);
 void		free_null(void *ptr);
 t_params	*free_return(t_params *params);
 int			error_code(int code);
