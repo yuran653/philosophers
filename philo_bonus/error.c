@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 06:29:32 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/06/02 05:02:17 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/06/03 06:41:29 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,21 @@ static void	print_error(int code)
 int	error_code_free_exit(int code, t_params *params)
 {
 	print_error(code);
-	code = ft_sem_close(params);
+	code = 0;
+	if (sem_close_unlink(params->forks, FORKS))
+		code  = 6;
+	if (sem_close_unlink(params->print, PRINT))
+		code  = 6;
+	if (sem_close_unlink(params->stop, STOP))
+		code  = 6;
+	if (sem_close_unlink(params->meals_sem, MEALS_SEM))
+		code  = 6;
 	if (params->philo)
+	{
+		if (sem_close_unlink(params->philo->death_sem, DEATH_SEM))
+			code  = 6;
 		free_null(params->philo);
+	}
 	if (params->pid)
 		free_null(params->pid);
 	if (params)

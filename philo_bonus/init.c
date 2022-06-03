@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 06:29:19 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/06/02 05:11:01 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/06/03 06:42:41 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,25 +27,6 @@ static sem_t	*ft_sem_open(char *name, int oflag, mode_t mode, int value)
 	return (sem);
 }
 
-int	ft_sem_close(t_params *params)
-{
-	int	err;	
-	
-	err = 0;
-	if (params->forks)
-		err = sem_close(params->forks);
-	if (params->print)
-		err = sem_close(params->print);
-	if (params->stop)
-		err = sem_close(params->stop);
-	if (params->meals_sem)
-		err = sem_close(params->meals_sem);
-	if (params->philo)
-		if (params->philo->death_sem)
-			err = sem_close(params->philo->death_sem);
-	return (err);
-}
-
 int	init_sem(t_params *params)
 {
 	params->forks = ft_sem_open(FORKS, O_CREAT, 0644, params->num_of_philos);
@@ -63,6 +44,19 @@ int	init_sem(t_params *params)
 	params->philo->death_sem = ft_sem_open(DEATH_SEM, O_CREAT, 0644, 1);
 	if (params->philo->death_sem == SEM_FAILED)
 		return (1);
+	return (0);
+}
+
+int	sem_close_unlink(sem_t *sem, char *name)
+{
+	if (sem)
+	{
+		if (sem_close(sem) == -1)
+			return (1);
+		else if (sem_unlink(name) == -1)
+			return (1);
+		sem = NULL;
+	}
 	return (0);
 }
 

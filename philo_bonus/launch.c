@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/29 01:53:06 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/06/02 06:55:49 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/06/03 06:49:41 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@
 
 int	launch(t_philo *philo, t_params *params)
 {
-	// pthread_t	death_t;
 	int		status;	
 	int		id;
 
@@ -84,7 +83,11 @@ int	launch(t_philo *philo, t_params *params)
 	{
 		params->pid[id] = fork();
 		if (params->pid[id] == -1)
+		{
+			while (--id >= 0)
+				kill(params->pid[id], SIGKILL);
 			return (7);
+		}
 		if (params->pid[id] == 0)
 		{
 			philo->id = id + 1;

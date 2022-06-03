@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 06:28:44 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/06/02 06:54:37 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/06/03 06:32:25 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int			valid_args(t_params *params);
 int			malloc_pid(t_params *params);
 int			init_philo(t_params *params);
 int			init_sem(t_params *params);
-int			ft_sem_close(t_params *params);
+int			sem_close_unlink(sem_t *sem, char *name);
 
 int			launch(t_philo *philo, t_params *params);
 int			philo_live(t_philo *philo, t_params *params);
