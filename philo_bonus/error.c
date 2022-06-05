@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 06:29:32 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/06/03 06:41:29 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/06/05 16:33:52 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,28 +37,25 @@ static void	print_error(int code)
 		write(2, "\e[1;31mERROR:\e[0m semaphore close error\n", 41);
 	else if (code == 7)
 		write(2, "\e[1;31mERROR:\e[0m process creating error\n", 42);
-	// else if (code == 8)
-	// 	write(2, "\e[1;31mERROR:\e[0m threads joining error\n", 41);
+	else if (code == 8)
+		write(2, "\e[1;31mERROR:\e[0m thread creating error\n", 41);
+	else if (code == 9)
+		write(2, "\e[1;31mERROR:\e[0m thread detach error\n", 41);
 }
 
 int	error_code_free_exit(int code, t_params *params)
 {
 	print_error(code);
-	code = 0;
+	kill_all_processes(params, params->num_of_philos, 0);
+	sem_post(params->print);
 	if (sem_close_unlink(params->forks, FORKS))
-		code  = 6;
+		code = 6;
 	if (sem_close_unlink(params->print, PRINT))
-		code  = 6;
-	if (sem_close_unlink(params->stop, STOP))
-		code  = 6;
-	if (sem_close_unlink(params->meals_sem, MEALS_SEM))
-		code  = 6;
+		code = 6;
+	if (sem_close_unlink(params->philos_had_eaten, PHILOS_HAD_EATEN))
+		code = 6;
 	if (params->philo)
-	{
-		if (sem_close_unlink(params->philo->death_sem, DEATH_SEM))
-			code  = 6;
 		free_null(params->philo);
-	}
 	if (params->pid)
 		free_null(params->pid);
 	if (params)

@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 06:28:44 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/06/03 06:32:25 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/06/05 16:35:47 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,50 +27,45 @@
 
 # define FORKS "forks"
 # define PRINT "print"
-# define STOP "stop"
-# define MEALS_SEM "meals_sem"
-# define DEATH_SEM "death_sem"
+# define DEATH "death"
+# define PHILOS_HAD_EATEN "philos_had_eaten"
 
 typedef struct s_philo
 {
-	int				id;
-	int				meals;
-	long long		death_time;
-	long long		last_meal;
-	sem_t			*death_sem;
+	int			id;
+	int			meals;
+	long long	death_time;
+	long long	last_meal;
 }	t_philo;
 
 typedef struct s_params
 {
-	int				num_of_philos;
-	int				time_to_die;
-	int				time_to_eat;
-	int				time_to_sleep;
-	int				times_must_eat;
-	int				philo_exit;
-	int				philos_had_eaten;
-	long long		start;
-	sem_t			*forks;
-	sem_t			*print;
-	sem_t			*stop;
-	sem_t			*meals_sem;
-	pid_t			*pid;
-	t_philo			*philo;
+	int			num_of_philos;
+	int			time_to_die;
+	int			time_to_eat;
+	int			time_to_sleep;
+	int			times_must_eat;
+	long long	start;
+	sem_t		*forks;
+	sem_t		*print;
+	sem_t		*philos_had_eaten;
+	pid_t		*pid;
+	t_philo		*philo;
 }	t_params;
 
 t_params	*validation(t_params *params, char **argv);
 int			valid_args(t_params *params);
-int			malloc_pid(t_params *params);
+int			calloc_pid(t_params *params);
 int			init_philo(t_params *params);
 int			init_sem(t_params *params);
-int			sem_close_unlink(sem_t *sem, char *name);
-
+sem_t		*ft_sem_open(char *name, int oflag, mode_t mode, int value);
 int			launch(t_philo *philo, t_params *params);
-int			philo_live(t_philo *philo, t_params *params);
-
+void		philo_live(t_philo *philo, t_params *params);
 long long	get_timestamp(void);
-int			ft_sleep(long long m_secs, t_params *params);
-int			print_status(t_philo *philo, t_params *params, char *action);
+void		ft_sleep(long long m_secs);
+void		print_status(t_philo *philo, t_params *params, char *action);
+int			kill_all_processes(t_params *params, int id, int value);
+int			sem_close_unlink(sem_t *sem, char *name);
 void		free_null(void *ptr);
 t_params	*free_return(t_params *params);
 int			error_code(int code);

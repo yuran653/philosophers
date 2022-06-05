@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 06:29:05 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/06/03 06:44:32 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/06/05 15:06:28 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,15 +27,13 @@ int	main(int argc, char **argv)
 		return (error_code(3));
 	if (valid_args(params))
 		return (error_code_free_exit(3, params));
-	if (malloc_pid(params))
+	if (calloc_pid(params))
 		return (error_code_free_exit(4, params));
 	if (init_philo(params))
 		return (error_code_free_exit(4, params));
 	if (init_sem(params))
 		return (error_code_free_exit(5, params));
-	// err = launch(params->philo, params);
-	err = 0;
-	printf("\n\t---OK---\n\n");
+	err = launch(params->philo, params);
 	return (error_code_free_exit(err, params));
 }
 
