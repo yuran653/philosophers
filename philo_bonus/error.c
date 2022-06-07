@@ -6,16 +6,31 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 06:29:32 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/06/07 14:15:44 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/06/08 00:37:16 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
 
-void	free_null(void *ptr)
+void	free_null(char **array, void *ptr)
 {
-	free(ptr);
-	ptr = NULL;
+	int	i;
+	
+	i = -1;
+	if (array)
+	{
+		while (array[++i])
+		{
+			printf("NAME[%d] = %s -> [%p]\n", i, array[i], array[i]);
+			// free(array[i]);
+		}
+		free(array);
+	}
+	if (ptr)
+	{
+		free(ptr);
+		ptr = NULL;
+	}
 }
 
 t_params	*free_return(t_params *params)
@@ -41,21 +56,28 @@ static void	print_error(int code)
 
 int	error_code_free_exit(int code, t_params *params)
 {
-	print_error(code);
+	if (code)
+		print_error(code);
 	kill_all_processes(params, params->num_of_philos, 0);
 	sem_post(params->print);
 	sem_close_unlink(params->forks, FORKS);
 	sem_close_unlink(params->print, PRINT);
 	sem_close_unlink(params->philos_had_eaten, PHILOS_HAD_EATEN);
 	if (params->philo)
-		free_null(params->philo);
+	{
+		if (params->philo->name)
+			free_null(params->philo->name, NULL);
+		if (params->philo->death)
+			free_null(NULL, params->philo->death);
+		free_null(NULL, params->philo);
+	}
 	if (params->pid)
-		free_null(params->pid);
+		free_null(NULL, params->pid);
 	if (params)
-		free_null(params);
+		free_null(NULL, params);
+	while (1);
 	if (code == 0)
 		return (0);
-	print_error(code);
 	return (1);
 }
 

@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/29 01:53:06 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/06/07 14:15:19 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/06/07 21:36:54 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ static void	*check_meals(void *ptr)
 	sem_wait(params->philos_had_eaten);
 	while (i++ < params->num_of_philos)
 		sem_wait(params->philos_had_eaten);
+	sem_wait(params->print);
 	exit (1);
 	return (NULL);
 }
