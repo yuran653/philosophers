@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/29 01:53:06 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/06/07 13:35:53 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/06/07 14:15:19 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,36 +21,12 @@ static void	philo_died(t_philo *philo, t_params *params)
 	{
 		sem_wait(params->print);
 		printf("\t[%7lldms] philosopher [%3d] died\n",
-		// printf("%lld %d died\n",
 			time - params->start, philo->id);
 		exit (1);
 	}
 }
 
-// static void	*check_philos_had_eaten(void *ptr)
-// {
-// 	t_params	*params;
-// 	int			i;
-
-// 	params = (t_params *)ptr;
-// 	i = 0;
-// 	sem_wait(params->print);
-// 	printf("Check piholosopher [%03d]\n", params->philo->id);
-// 	sem_post(params->print);
-// 	sem_wait(params->philos_had_eaten);
-// 	while (i < params->num_of_philos)
-// 	{
-// 		sem_wait(params->philos_had_eaten);
-// 		i++;
-// 	}
-// 	sem_wait(params->print);
-// 	printf("!Exit piholosopher [%03d]\n", params->philo->id);
-// 	sem_post(params->print);
-// 	// while (1);
-// 	// exit (1);
-// }
-
-static void *check_philos_had_eaten(void *ptr)
+static void	*check_meals(void *ptr)
 {
 	t_params	*params;
 	int			i;
@@ -60,9 +36,6 @@ static void *check_philos_had_eaten(void *ptr)
 	sem_wait(params->philos_had_eaten);
 	while (i++ < params->num_of_philos)
 		sem_wait(params->philos_had_eaten);
-	sem_wait(params->print);
-	printf("All of philosophers have eaten enough\n");
-	sem_post(params->print);
 	exit (1);
 	return (NULL);
 }
@@ -87,13 +60,13 @@ static void	*death_check(void *ptr)
 	return (NULL);
 }
 
-static void	wait_exit_status(t_params *params, int id)
+static int	thread_create_detach(pthread_t *th, void *func, t_params *params)
 {
-	int	status;
-	
-	while (waitpid(-1, &status, 0) > 0)
-		if (WEXITSTATUS(status) == 1)
-			kill_all_processes(params, id, 0);
+	if (pthread_create(th, NULL, func, params))
+		return (7);
+	if (pthread_detach(*th))
+		return (7);
+	return (0);
 }
 
 int	launch(t_philo *philo, t_params *params)
@@ -101,61 +74,26 @@ int	launch(t_philo *philo, t_params *params)
 	pthread_t	stop_t;
 	pthread_t	meals_t;
 	int			id;
-	// int			value;
-	// int			i;
-	
+
 	id = 0;
 	while (id < params->num_of_philos)
 	{
 		params->pid[id] = fork();
 		if (params->pid[id] == -1)
-			return (kill_all_processes(params, id, 7));
+			return (kill_all_processes(params, id, 6));
 		if (params->pid[id] == 0)
 		{
 			philo->id = id + 1;
 			if (params->times_must_eat && id == 0)
-			{
-				if (pthread_create(&meals_t, NULL, &check_philos_had_eaten, params))
-					return (kill_all_processes(params, id, 8));
-				if (pthread_detach(meals_t))
-					return (kill_all_processes(params, id, 9));
-			}
-			if (pthread_create(&stop_t, NULL, &death_check, params))
-				return (kill_all_processes(params, id, 8));
-			if (pthread_detach(stop_t))
-				return (kill_all_processes(params, id, 9));
+				if (thread_create_detach(&meals_t, &check_meals, params))
+					return (kill_all_processes(params, id, 7));
+			if (thread_create_detach(&stop_t, &death_check, params))
+				return (kill_all_processes(params, id, 7));
 			philo_live(philo, params);
 		}
 		usleep(50);
 		id++;
 	}
-	// if (params->times_must_eat && params->pid[0])
-	// {
-		// if (params->times_must_eat)
-		// {
-		// 	if (pthread_create(&meals_t, NULL, &check_philos_had_eaten, params))
-		// 		return (kill_all_processes(params, id, 8));
-		// 	if (pthread_detach(meals_t))
-		// 		return (kill_all_processes(params, id, 9));
-		// }
-		// i = 0;
-		// sem_wait(params->philos_had_eaten);
-		// while (i < params->num_of_philos)
-		// {
-		// 	sem_wait(params->philos_had_eaten);
-		// 	i++;
-		// }
-	// }
-	// if (params->times_must_eat && params->pid[0] > 0)
-	// {
-	// 	if (pthread_create(&meals_t, NULL, &check_philos_had_eaten, params))
-	// 		return (kill_all_processes(params, id, 8));
-	// 	if (pthread_detach(meals_t))
-	// 		return (kill_all_processes(params, id, 9));
-		// sem_wait(params->print);
-		// printf("All of philosophers have eaten enough\n");
-		// sem_post(params->print);
-	// }
 	wait_exit_status(params, id);
 	return (0);
 }

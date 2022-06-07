@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 16:46:26 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/06/06 20:11:41 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/06/07 14:21:17 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,7 @@ static void	philo_is_living(t_philo *philo, t_params *params)
 	sem_post(params->forks);
 	philo->meals++;
 	if (params->times_must_eat && params->times_must_eat == philo->meals)
-	{
-		sem_wait(params->print);
-		printf("Philosofer [%03d] has eaten [%d] times\n", philo->id, philo->meals);
 		sem_post(params->philos_had_eaten);
-		sem_post(params->print);
-	}
 	print_status(philo, params, "is sleeping");
 	ft_sleep(params->time_to_sleep);
 	print_status(philo, params, "is thinking");
@@ -46,7 +41,7 @@ static void	philo_take_forks(t_philo *philo, t_params *params)
 	if (philo->death_time < time_stamp - params->start)
 	{
 		sem_post(params->forks);
-		sem_post(params->forks);		
+		sem_post(params->forks);
 		exit (1);
 	}
 	philo->last_meal = time_stamp;

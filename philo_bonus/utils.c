@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 06:29:25 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/06/05 19:19:01 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/06/07 14:16:36 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ void	print_status(t_philo *philo, t_params *params, char *action)
 {
 	sem_wait(params->print);
 	printf("\t[%7lldms] philosopher [%3d] %s\n",
-	// printf("%lld %d %s\n",
 		get_timestamp() - params->start, philo->id, action);
 	sem_post(params->print);
 }
@@ -36,6 +35,15 @@ void	ft_sleep(long long m_secs)
 	stop = get_timestamp() + m_secs;
 	while (get_timestamp() < stop)
 		usleep(250);
+}
+
+void	wait_exit_status(t_params *params, int id)
+{
+	int	status;
+
+	while (waitpid(-1, &status, 0) > 0)
+		if (WEXITSTATUS(status) == 1)
+			kill_all_processes(params, id, 0);
 }
 
 int	kill_all_processes(t_params *params, int id, int value)

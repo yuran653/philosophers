@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 06:28:44 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/06/05 16:35:47 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/06/07 14:16:00 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,6 @@
 # include <stdlib.h>
 # include <sys/time.h>
 # include <unistd.h>
-
-#include <errno.h>
-#include <string.h>
 
 # define FORKS "forks"
 # define PRINT "print"
@@ -64,8 +61,9 @@ void		philo_live(t_philo *philo, t_params *params);
 long long	get_timestamp(void);
 void		ft_sleep(long long m_secs);
 void		print_status(t_philo *philo, t_params *params, char *action);
+void		wait_exit_status(t_params *params, int id);
 int			kill_all_processes(t_params *params, int id, int value);
-int			sem_close_unlink(sem_t *sem, char *name);
+void		sem_close_unlink(sem_t *sem, char *name);
 void		free_null(void *ptr);
 t_params	*free_return(t_params *params);
 int			error_code(int code);

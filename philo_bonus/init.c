@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 06:29:19 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/06/06 20:41:26 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/06/07 14:12:22 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,16 +36,14 @@ int	init_sem(t_params *params)
 	return (0);
 }
 
-int	sem_close_unlink(sem_t *sem, char *name)
+void	sem_close_unlink(sem_t *sem, char *name)
 {
 	if (sem)
 	{
 		sem_unlink(name);
-		if (sem_close(sem) == -1)
-			return (1);
+		sem_close(sem);
 		sem = NULL;
 	}
-	return (0);
 }
 
 int	calloc_pid(t_params *params)
