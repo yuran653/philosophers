@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/29 01:53:06 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/06/05 19:36:49 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/06/07 13:35:53 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,17 +30,44 @@ static void	philo_died(t_philo *philo, t_params *params)
 // static void	*check_philos_had_eaten(void *ptr)
 // {
 // 	t_params	*params;
-// 	// int			i;
+// 	int			i;
 
-// 	// i = 0;
 // 	params = (t_params *)ptr;
-// 	ft_sleep(params->time_to_eat * 2 + params->time_to_sleep);
-// 	// while (i < params->num_of_philos)
+// 	i = 0;
+// 	sem_wait(params->print);
+// 	printf("Check piholosopher [%03d]\n", params->philo->id);
+// 	sem_post(params->print);
+// 	sem_wait(params->philos_had_eaten);
+// 	while (i < params->num_of_philos)
+// 	{
 // 		sem_wait(params->philos_had_eaten);
+// 		i++;
+// 	}
+// 	sem_wait(params->print);
+// 	printf("!Exit piholosopher [%03d]\n", params->philo->id);
+// 	sem_post(params->print);
+// 	// while (1);
 // 	// exit (1);
 // }
 
-static void	*death_meals_check(void *ptr)
+static void *check_philos_had_eaten(void *ptr)
+{
+	t_params	*params;
+	int			i;
+
+	params = (t_params *)ptr;
+	i = 0;
+	sem_wait(params->philos_had_eaten);
+	while (i++ < params->num_of_philos)
+		sem_wait(params->philos_had_eaten);
+	sem_wait(params->print);
+	printf("All of philosophers have eaten enough\n");
+	sem_post(params->print);
+	exit (1);
+	return (NULL);
+}
+
+static void	*death_check(void *ptr)
 {
 	t_params	*params;
 	t_philo		*philo;
@@ -72,10 +99,11 @@ static void	wait_exit_status(t_params *params, int id)
 int	launch(t_philo *philo, t_params *params)
 {
 	pthread_t	stop_t;
-	// pthread_t	meals_t;
+	pthread_t	meals_t;
 	int			id;
+	// int			value;
+	// int			i;
 	
-	stop_t = NULL;
 	id = 0;
 	while (id < params->num_of_philos)
 	{
@@ -85,15 +113,14 @@ int	launch(t_philo *philo, t_params *params)
 		if (params->pid[id] == 0)
 		{
 			philo->id = id + 1;
-			if (params->times_must_eat)
+			if (params->times_must_eat && id == 0)
 			{
-				sem_wait(params->philos_had_eaten);
-				// if (pthread_create(&meals_t, NULL, &check_philos_had_eaten, params))
-				// 	return (kill_all_processes(params, id, 8));
-				// if (pthread_detach(meals_t))
-				// 	return (kill_all_processes(params, id, 9));
+				if (pthread_create(&meals_t, NULL, &check_philos_had_eaten, params))
+					return (kill_all_processes(params, id, 8));
+				if (pthread_detach(meals_t))
+					return (kill_all_processes(params, id, 9));
 			}
-			if (pthread_create(&stop_t, NULL, &death_meals_check, params))
+			if (pthread_create(&stop_t, NULL, &death_check, params))
 				return (kill_all_processes(params, id, 8));
 			if (pthread_detach(stop_t))
 				return (kill_all_processes(params, id, 9));
@@ -102,6 +129,33 @@ int	launch(t_philo *philo, t_params *params)
 		usleep(50);
 		id++;
 	}
+	// if (params->times_must_eat && params->pid[0])
+	// {
+		// if (params->times_must_eat)
+		// {
+		// 	if (pthread_create(&meals_t, NULL, &check_philos_had_eaten, params))
+		// 		return (kill_all_processes(params, id, 8));
+		// 	if (pthread_detach(meals_t))
+		// 		return (kill_all_processes(params, id, 9));
+		// }
+		// i = 0;
+		// sem_wait(params->philos_had_eaten);
+		// while (i < params->num_of_philos)
+		// {
+		// 	sem_wait(params->philos_had_eaten);
+		// 	i++;
+		// }
+	// }
+	// if (params->times_must_eat && params->pid[0] > 0)
+	// {
+	// 	if (pthread_create(&meals_t, NULL, &check_philos_had_eaten, params))
+	// 		return (kill_all_processes(params, id, 8));
+	// 	if (pthread_detach(meals_t))
+	// 		return (kill_all_processes(params, id, 9));
+		// sem_wait(params->print);
+		// printf("All of philosophers have eaten enough\n");
+		// sem_post(params->print);
+	// }
 	wait_exit_status(params, id);
 	return (0);
 }

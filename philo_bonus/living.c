@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 16:46:26 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/06/05 19:38:02 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/06/06 20:11:41 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 
 static void	philo_is_living(t_philo *philo, t_params *params)
 {
-	int value;
-	
 	print_status(philo, params, "is eating");
 	ft_sleep(params->time_to_eat);
 	sem_post(params->forks);
@@ -25,11 +23,7 @@ static void	philo_is_living(t_philo *philo, t_params *params)
 	{
 		sem_wait(params->print);
 		printf("Philosofer [%03d] has eaten [%d] times\n", philo->id, philo->meals);
-		sem_getvalue(params->philo, &value);
-		printf("Semaphore value before -> [%d]\n", value);
 		sem_post(params->philos_had_eaten);
-		sem_getvalue(params->philo, &value);
-		printf(" Semaphore value after -> [%d]\n", value);
 		sem_post(params->print);
 	}
 	print_status(philo, params, "is sleeping");

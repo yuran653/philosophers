@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 06:29:19 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/06/05 17:39:42 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/06/06 20:41:26 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	init_sem(t_params *params)
 	if (params->print == SEM_FAILED)
 		return (1);
 	params->philos_had_eaten
-		= ft_sem_open(PHILOS_HAD_EATEN, O_CREAT, 0644, params->num_of_philos * 2);
+		= ft_sem_open(PHILOS_HAD_EATEN, O_CREAT, 0644, 1);
 	if (params->philos_had_eaten == SEM_FAILED)
 		return (1);
 	return (0);
