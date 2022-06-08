@@ -6,14 +6,14 @@
 #    By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/01 06:28:38 by jgoldste          #+#    #+#              #
-#    Updated: 2022/06/07 19:49:49 by jgoldste         ###   ########.fr        #
+#    Updated: 2022/06/08 16:20:34 by jgoldste         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		=	philo_bonus
 
 SRCS		=	philo_bonus.c	validation.c	init.c		utils.c		error.c\
-				launch.c		living.c	
+				launch.c		living.c		check_status.c
 
 HEADER		=	philo_bonus.h
 
