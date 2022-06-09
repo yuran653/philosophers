@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 16:46:26 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/06/07 21:35:52 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/06/09 21:07:43 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,9 @@ static void	philo_take_forks(t_philo *philo, t_params *params)
 		exit (1);
 	}
 	philo->last_meal = time_stamp;
+	sem_wait(philo->death[philo->id - 1]);
 	philo->death_time = philo->last_meal + params->time_to_die;
+	sem_post(philo->death[philo->id - 1]);
 	philo_is_living(philo, params);
 }
 

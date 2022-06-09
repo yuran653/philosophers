@@ -6,44 +6,11 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 06:29:32 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/06/08 16:29:01 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/06/09 21:16:45 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
-
-// void	free_null(void **array, void *ptr)
-// {
-// 	int	i;
-	
-// 	i = 0;
-// 	if (array)
-// 	{
-// 		while (array[i])
-// 			free(array[i++]);
-// 		free(array);
-// 	}
-// 	if (ptr)
-// 	{
-// 		free(ptr);
-// 		ptr = NULL;
-// 	}
-// }
-
-void	free_null(void *ptr)
-{
-	if (ptr)
-		free(ptr);
-	ptr = NULL;
-}
-
-t_params	*free_return(t_params *params)
-{
-	if (params)
-		free(params);
-	params = NULL;
-	return (params);
-}
 
 static void	print_error(int code)
 {
@@ -59,6 +26,21 @@ static void	print_error(int code)
 		write(2, "\e[1;31mERROR:\e[0m thread creating/detach error\n", 48);
 }
 
+static void	free_philo(t_params *params)
+{
+	int	id;
+
+	id = -1;
+	while (++id < params->num_of_philos)
+		sem_close_unlink(params->philo->death[id], params->philo->name[id]);
+	if (params->philo->name)
+		free_null_array((void **)params->philo->name,
+			params->num_of_philos + 1);
+	if (params->philo->death)
+		free_null(params->philo->death);
+	free_null(params->philo);
+}
+
 int	error_code_free_exit(int code, t_params *params)
 {
 	if (code)
@@ -69,24 +51,11 @@ int	error_code_free_exit(int code, t_params *params)
 	sem_close_unlink(params->print, PRINT);
 	sem_close_unlink(params->philos_had_eaten, PHILOS_HAD_EATEN);
 	if (params->philo)
-		free_null(params->philo);
+		free_philo(params);
 	if (params->pid)
 		free_null(params->pid);
 	if (params)
 		free_null(params);
-	// if (params->philo)
-	// {
-	// 	if (params->philo->name)
-	// 		free_null((void **)params->philo->name, NULL);
-	// 	if (params->philo->death)
-	// 		free_null(NULL, params->philo->death);
-	// 	free_null(NULL, params->philo);
-	// }
-	// if (params->pid)
-	// 	free_null(NULL, params->pid);
-	// if (params)
-	// 	free_null(NULL, params);
-	// while (1);
 	if (code == 0)
 		return (0);
 	return (1);

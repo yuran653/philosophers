@@ -6,7 +6,7 @@
 /*   By: jgoldste <jgoldste@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 16:18:45 by jgoldste          #+#    #+#             */
-/*   Updated: 2022/06/08 16:19:39 by jgoldste         ###   ########.fr       */
+/*   Updated: 2022/06/09 21:07:25 by jgoldste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,17 @@ void	philo_died(t_philo *philo, t_params *params)
 {
 	long long	time;
 
+	sem_wait(philo->death[philo->id - 1]);
 	time = get_timestamp();
 	if (philo->death_time < time - params->start)
 	{
+		sem_post(philo->death[philo->id - 1]);
 		sem_wait(params->print);
 		printf("\t[%7lldms] philosopher [%3d] died\n",
 			time - params->start, philo->id);
 		exit (1);
 	}
+	sem_post(philo->death[philo->id - 1]);
 }
 
 void	*death_check(void *ptr)
